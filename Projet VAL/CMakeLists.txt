@@ -3,7 +3,7 @@
 #
 
 # Ajoutez une source à l'exécutable de ce projet.
-add_executable (CMakeTarget "Projet VAL.cpp" "Projet VAL.h" "rame.h")
+add_executable (CMakeTarget "Projet VAL.cpp" "Projet VAL.h" "rame.h" "rame.c")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 20)

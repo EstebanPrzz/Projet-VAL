@@ -5,4 +5,76 @@
 
 #include <iostream>
 
+class rame {
+private:
+		int number;
+		int speed;
+		int x;
+		int y;
+		int passanger;
+public:
+	rame(int num) {
+		number = num;
+		speed = 0;
+		x = 0;
+		y = 0;
+		passanger = 0;
+	}
+
+	//Getters
+	int get_number();
+	int get_speed();
+	int get_x();
+	int get_y();
+	int get_passanger();
+
+	//Setters
+	void set_speed(int s);
+	void set_position(int x, int y);
+	void set_passanger(int nb);
+
+	//Méthode d'instance à instaurer 
+	/*rame distance(get(x),get(y),station); //Comment savoir qu'elle station c'est?
+	void update_vitesse(distance()); // ça c'est à la fin
+	void update_pos();*/ //Tout les x temps on update sa position
+};
+
+
+class station {
+private:
+	char name;
+	int passanger;
+	int x;
+	int y;
+	bool rame_present; // Permet de savoir si la rame est présente ou non au niveau de la station
+	bool ready; // Permet de savoir si on peut envoyer ou non la rame 
+public:
+
+	station(int posx, int posy, char nom) {
+		name = nom;
+		passanger = 0;
+		x = posx;
+		y = posy;
+		rame_present = false;
+		ready = false;
+	}
+
+
+	//Getters
+	int get_x();
+	int get_y();
+	int get_passanger();
+	
+	//Setters
+	void set_passanger(int nb);
+
+	//Méthode d'instance à instaurer
+	/*void update_passanger();*/ //permet juste de changer le nombre de passagers
+
+};
+
+class superviseur : public station, public rame { // Aucune idée de comment on s'y prend
+
+};
+
 // TODO: Référencez ici les en-têtes supplémentaires nécessaires à votre programme.
