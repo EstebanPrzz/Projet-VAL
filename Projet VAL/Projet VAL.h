@@ -13,11 +13,11 @@ private:
 		int y;
 		int passanger;
 public:
-	rame(int num) {
+	rame(int posx, int posy,int num) {
 		number = num;
 		speed = 0;
-		x = 0;
-		y = 0;
+		x = posx;
+		y = posy;
 		passanger = 0;
 	}
 

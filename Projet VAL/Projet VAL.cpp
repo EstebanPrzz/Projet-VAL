@@ -2,8 +2,7 @@
 //
 
 #include "Projet VAL.h" // Projet qui a les déf de mes classes
-#include "rame.c" // Projet qui s'occupe de tout exécuter
-#pragma once
+
 using namespace std;
 
 
