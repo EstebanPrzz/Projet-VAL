@@ -19,10 +19,19 @@ const std::string path_image(_PATH_IMG_);
 
 
 int main() {
-	const Vector2u WINDOW_SIZE(1200, 900);
+	const Vector2u WINDOW_SIZE(1200, 800);
 	RenderWindow app(VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y, 32), "My Camera");
 	app.setFramerateLimit(60);
 
+	sf::Font font;
+	if (!font.loadFromFile("C:/Users/Admin/source/repos/EstebanPrzz/Projet-VAL/arial.ttf")) {
+		// Gestion de l'erreur si la police ne peut pas être chargée
+		return EXIT_FAILURE;
+	}
+	sf::Text indexText;
+	indexText.setFont(font);
+	indexText.setCharacterSize(24);
+	indexText.setFillColor(sf::Color::White);
 	// Fond d'écran
 	Texture backgroundImage, metroImage, stationImage, railImage;
 	Sprite backgroundSprite, metroSprite, stationSprite, railSprite;
@@ -42,7 +51,20 @@ int main() {
 	rails.push_back({ 600, 400 });
 	rails.push_back({ 600, 375 });
 	rails.push_back({ 600, 350 });
-	rame metro(500,400,5);
+	rails.push_back({ 600, 325 });
+	rails.push_back({ 600, 300 });
+	rails.push_back({ 575, 300 });
+	rails.push_back({ 550, 300 });
+	rails.push_back({ 550, 325 });
+	rails.push_back({ 550, 350 });
+	rails.push_back({ 550, 375 });
+	rails.push_back({ 550, 400 });
+	rails.push_back({ 575, 400 });
+	rails.push_back({ 600, 400 });
+
+
+
+	rame metro(600,400,5);
 	station test(320, 450,'test');
 
 	Vector2f center(0, 0);
@@ -50,7 +72,7 @@ int main() {
 	View view(center, halfSize);
 	app.setView(view);
 
-	metroSprite.setPosition(sf::Vector2f(500, 400));
+	metroSprite.setPosition(sf::Vector2f(600, 400));
 	metroSprite.setScale(sf::Vector2f(2, 2));
 
 	stationSprite.setPosition(sf::Vector2f(20, 34));
@@ -71,22 +93,27 @@ int main() {
 		// Réglage de la caméra
 		view.setCenter(halfSize);
 		app.setView(view);
+
 		int index = metro.is_on_rail(rails);
-		if (metro.get_x() <= rails[index+2].x) {
-			metro.move();
-		}
+		cout << "Index du rail : " << index << endl;
+			if (metro.get_y() > rails[index + 1].y) {
+				metro.move(0, -0.2);
+			}
+			if (metro.get_x() > rails[index + 1].x) {
+				metro.move(-0.2, 0);
+			}
+			if (metro.get_y() < rails[index + 1].y) {
+				metro.move(0, 0.2);
+			}
+			if (metro.get_x() < rails[index + 1].x) {
+				metro.move(0.2, 0);
+			}
 
 
 		// Affichage
 		app.clear();
 		// background
 		app.draw(backgroundSprite);
-		// Station
-		app.draw(stationSprite);
-		stationSprite.setPosition(test.get_x(), test.get_y());
-		// Rame
-		app.draw(metroSprite);
-		metroSprite.setPosition(metro.get_x(), metro.get_y());
 
 		// affichage rail
 		for (const Rail& rail : rails) {
@@ -94,6 +121,18 @@ int main() {
 			app.draw(railSprite);
 		}
 
+		// Station
+		app.draw(stationSprite);
+		stationSprite.setPosition(test.get_x(), test.get_y());
+		// Rame
+		app.draw(metroSprite);
+		metroSprite.setPosition(metro.get_x(), metro.get_y());
+
+
+		indexText.setString("Index du rail : " + to_string(index));
+		indexText.setPosition(500, 400); // Position du texte sur l'écran
+		// Afficher le texte à l'écran
+		app.draw(indexText);
 
 		app.display();
 	}

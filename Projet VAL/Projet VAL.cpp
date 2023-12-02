@@ -37,42 +37,41 @@ void rame::set_passanger(int nb) {
 	this->passanger = nb;
 }
 
-void rame::move() {
-	x += (0,1);
-	y += (0);
-}
-
-void
-rame::speedUp()
-{
-	if (speed < 3.f)
-		speed += 0.05f;
-}
-
-void
-rame::speedDown()
-{
-	if (speed > 0.f)
-		speed -= 0.05f;
-	else
-		speed = 0;
+void rame::move(float vx, float vy) {
+	x += vx;
+	y += vy;
 }
 
 int rame::is_on_rail(std::vector<Rail>& rails) {
-	// On regarde chaque rail installé
-	for (size_t i = 0; i < rails.size(); ++i) {
-		const Rail& rail = rails[i];
+    // On regarde chaque rail installé
+    for (size_t i = 0; i < rails.size(); ++i) {
+        const Rail& rail = rails[i];
 
-		// On analyse la position de la rame en fonction de la positions des rails 
-		if ((this->get_x() >= rail.x && this->get_x() <= rail.x + 1) && (this->get_y() >= rail.y && this->get_y() <= rail.y + 1)) {
-			// renvoie l'index du rail dans le tableau de position des Sprites
-			return static_cast<int>(i);
-		}
-	}
+        // On analyse la position de la rame en fonction de la positions des rails 
+        if ((this->get_x() >= rail.x && this->get_x() <= rail.x + 1) && (this->get_y() >= rail.y && this->get_y() <= rail.y + 1)) {
+            // renvoie l'index du rail dans le tableau de position des Sprites
+            return static_cast<int>(i);
+        }
+    }
 
-	// Si la rame n'est sur aucun rail
-	return -1;
+    // Si la rame n'est sur aucun rail, on renvoie l'index du rail le plus proche
+    int closestIndex = 0;
+    float closestDistance = std::numeric_limits<float>::max();
+
+    for (size_t i = 0; i < rails.size(); ++i) {
+        const Rail& rail = rails[i];
+        float distance = std::abs(this->get_x() - rail.x) + std::abs(this->get_y() - rail.y);
+
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = static_cast<int>(i);
+        }
+    }
+
+    return closestIndex;
 }
+
+
 //Def des fonctions de la station
 
 //Getters

@@ -42,9 +42,7 @@ public:
 	/*rame distance(get(x),get(y),station); //Comment savoir qu'elle station c'est?
 	void update_vitesse(distance()); // ça c'est à la fin
 	void update_pos();*/ //Tout les x temps on update sa position
-	void speedUp();
-	void speedDown();
-	void move();
+	void move(float vx, float vy);
 	int is_on_rail(std::vector<Rail>& rails);
 };
 
