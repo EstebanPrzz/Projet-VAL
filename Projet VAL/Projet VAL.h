@@ -4,16 +4,21 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
+
+struct Rail {
+	float x, y;
+};
 
 class rame {
 private:
 		int number;
 		int speed;
-		int x;
-		int y;
+		float x;
+		float y;
 		int passanger;
 public:
-	rame(int posx, int posy,int num) {
+	rame(float posx, float posy,int num) {
 		number = num;
 		speed = 0;
 		x = posx;
@@ -37,6 +42,10 @@ public:
 	/*rame distance(get(x),get(y),station); //Comment savoir qu'elle station c'est?
 	void update_vitesse(distance()); // ça c'est à la fin
 	void update_pos();*/ //Tout les x temps on update sa position
+	void speedUp();
+	void speedDown();
+	void move();
+	int is_on_rail(std::vector<Rail>& rails);
 };
 
 
@@ -73,8 +82,9 @@ public:
 
 };
 
-class superviseur : public station, public rame { // Aucune idée de comment on s'y prend
 
-};
 
-// TODO: Référencez ici les en-têtes supplémentaires nécessaires à votre programme.
+	//superviseur(int posx, int posy, char nom, int ramePosx, int ramePosy, int rameNum) {
+	//}
+
+// TODO: Référencez ici les en-têtes supplémentaires nécessaires à votre programme.;

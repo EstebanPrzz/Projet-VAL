@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Projet VAL.h"
+#include <vector>
 
 using namespace std;
 using namespace sf;
@@ -23,11 +24,11 @@ int main() {
 	app.setFramerateLimit(60);
 
 	// Fond d'écran
-	Texture backgroundImage, metroImage, stationImage;
-	Sprite backgroundSprite, metroSprite, stationSprite;
+	Texture backgroundImage, metroImage, stationImage, railImage;
+	Sprite backgroundSprite, metroSprite, stationSprite, railSprite;
 
 	if (!backgroundImage.loadFromFile(path_image + "background1200.jpg") ||
-		!metroImage.loadFromFile(path_image + "metro.png") ||!stationImage.loadFromFile(path_image+"station.png")){
+		!metroImage.loadFromFile(path_image + "metro2.png") ||!stationImage.loadFromFile(path_image+"station.png") || !railImage.loadFromFile(path_image + "rail.png")){
 		cerr << "Erreur pendant le chargement des images" << endl;
 		return EXIT_FAILURE; // On ferme le programme
 	}
@@ -35,10 +36,13 @@ int main() {
 	backgroundSprite.setTexture(backgroundImage);
 	metroSprite.setTexture(metroImage);
 	stationSprite.setTexture(stationImage);
-	
+	railSprite.setTexture(railImage);
 
-
-	rame metro(300,400,5);
+	std::vector<Rail> rails;
+	rails.push_back({ 600, 400 });
+	rails.push_back({ 600, 375 });
+	rails.push_back({ 600, 350 });
+	rame metro(500,400,5);
 	station test(320, 450,'test');
 
 	Vector2f center(0, 0);
@@ -46,13 +50,13 @@ int main() {
 	View view(center, halfSize);
 	app.setView(view);
 
-	metroSprite.setPosition(sf::Vector2f(20, 34));
-	metroSprite.setScale(sf::Vector2f(0.2, 0.2));
+	metroSprite.setPosition(sf::Vector2f(500, 400));
+	metroSprite.setScale(sf::Vector2f(2, 2));
 
 	stationSprite.setPosition(sf::Vector2f(20, 34));
 	stationSprite.setScale(sf::Vector2f(0.2, 0.2));
 
-
+	railSprite.setScale(sf::Vector2f(2, 2));
 
 	while (app.isOpen()) // Boucle principale
 	{
@@ -64,17 +68,32 @@ int main() {
 				app.close();
 			}
 		}
-
+		// Réglage de la caméra
 		view.setCenter(halfSize);
 		app.setView(view);
+		int index = metro.is_on_rail(rails);
+		if (metro.get_x() <= rails[index+2].x) {
+			metro.move();
+		}
 
+
+		// Affichage
 		app.clear();
+		// background
 		app.draw(backgroundSprite);
-		stationSprite.setPosition(test.get_x(), test.get_y());
+		// Station
 		app.draw(stationSprite);
-
-		metroSprite.setPosition(metro.get_x(), metro.get_y());
+		stationSprite.setPosition(test.get_x(), test.get_y());
+		// Rame
 		app.draw(metroSprite);
+		metroSprite.setPosition(metro.get_x(), metro.get_y());
+
+		// affichage rail
+		for (const Rail& rail : rails) {
+			railSprite.setPosition(rail.x, rail.y);
+			app.draw(railSprite);
+		}
+
 
 		app.display();
 	}
