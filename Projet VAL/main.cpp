@@ -95,7 +95,6 @@ int main() {
 		app.setView(view);
 
 		int index = metro.is_on_rail(rails);
-		cout << "Index du rail : " << index << endl;
 			if (metro.get_y() > rails[index + 1].y) {
 				metro.move(0, -0.2);
 			}
