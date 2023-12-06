@@ -2,7 +2,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "Projet VAL.h"
+#include "classe.h"
 #include <vector>
 
 using namespace std;

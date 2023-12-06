@@ -1,8 +1,9 @@
 ﻿// Projet VAL.cpp : définit le point d'entrée de l'application.
 //
 
-#include "Projet VAL.h" // Projet qui a les déf de mes classes
+#include "classe.h" // Projet qui a les déf de mes classes
 #include <vector>
+#pragma once
 
 
 // Def des fonctions de la rame
@@ -37,7 +38,7 @@ void rame::set_passanger(int nb) {
 	this->passanger = nb;
 }
 
-void rame::move(float vx, float vy) {
+void rame::move(const float &vx,const float &vy) {
 	x += vx;
 	y += vy;
 }
