@@ -3,10 +3,10 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-project ("Projet VAL")
+project ("Projet_fichier")
 
 if(MSVC)
-  set(SFML_DIR "C:/Program Files/SFML/lib/cmake/SFML")
+  set(SFML_DIR "C:/Program files/SFML")
   set(SFML_STATIC_LIBRARIES TRUE)
   add_compile_options(
     $<$<CONFIG:>:/MT> #---------|
@@ -21,4 +21,4 @@ link_libraries(sfml-graphics sfml-window)
 
 
 # Incluez les sous-projets.
-add_subdirectory ("Projet VAL")
+add_subdirectory ("Projet_fichier")
