@@ -10,43 +10,6 @@ struct Rail {
 	float x, y;
 };
 
-class rame {
-private:
-		int number;
-		int speed;
-		float x;
-		float y;
-		int passanger;
-public:
-	rame(float posx, float posy,int num) {
-		number = num;
-		speed = 0;
-		x = posx;
-		y = posy;
-		passanger = 0;
-	}
-
-	//Getters
-	int get_number();
-	int get_speed();
-	int get_x();
-	int get_y();
-	int get_passanger();
-
-	//Setters
-	void set_speed(int s);
-	void set_position(int x, int y);
-	void set_passanger(int nb);
-
-	//Méthode d'instance à instaurer 
-	/*rame distance(get(x),get(y),station); //Comment savoir qu'elle station c'est?
-	void update_vitesse(distance()); // ça c'est à la fin
-	void update_pos();*/ //Tout les x temps on update sa position
-	void move(const float &vx, const float &vy);
-	int is_on_rail(std::vector<Rail>& rails);
-};
-
-
 class station {
 private:
 	char name;
@@ -71,14 +34,56 @@ public:
 	int get_x();
 	int get_y();
 	int get_passanger();
-	
+	char get_name();
+
 	//Setters
 	void set_passanger(int nb);
 
 	//Méthode d'instance à instaurer
 	/*void update_passanger();*/ //permet juste de changer le nombre de passagers
-
+	int distance(station a);
+	int distance_x(station a);
+	int distance_y(station a);
 };
+
+
+class rame {
+private:
+		int number;
+		float speed; // vitesse en km/h
+		float x;
+		float y;
+		int passanger;
+public:
+	rame(float posx, float posy,int num) {
+		number = num;
+		speed = 0;
+		x = posx;
+		y = posy;
+		passanger = 0;
+	}
+
+	//Getters
+	int get_number();
+	float get_speed();
+	float get_x();
+	float get_y();
+	int get_passanger();
+
+	//Setters
+	void set_speed(float s);
+	void set_position(float x, float y);
+	void set_passanger(int nb);
+
+	//Méthode d'instance à instaurer 
+	/*rame distance(get(x),get(y),station); //Comment savoir qu'elle station c'est?*/
+	void update_pos(int distance, float x, float y);
+	void update_vitesse(int distance); //Fonction qui update la vitesse en fonction de la distance
+	int distance_parcourir(int vitesse); // Permet de savoir la distance que va parcourire le train à une vitesse donnée
+	void move(const int &vx, const int &vy);
+	int is_on_rail(std::vector<Rail>& rails);
+};
+
 
 
 
