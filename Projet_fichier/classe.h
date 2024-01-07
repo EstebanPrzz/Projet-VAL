@@ -90,5 +90,4 @@ public:
 void update_all(station *liste[], int taille_liste,rame &a);
 	//superviseur(int posx, int posy, char nom, int ramePosx, int ramePosy, int rameNum) {
 	//}
-
 // TODO: Référencez ici les en-têtes supplémentaires nécessaires à votre programme.;

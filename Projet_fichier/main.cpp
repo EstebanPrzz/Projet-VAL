@@ -24,7 +24,7 @@ int main() {
 	const Vector2u WINDOW_SIZE(1200, 800);
 	RenderWindow app(VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y, 32), "My Camera");
 	app.setFramerateLimit(60);
-	sss
+	
 
 	sf::Font font;
 	if (!font.loadFromFile("C:/Users/Admin/source/repos/EstebanPrzz/Projet-VAL/arial.ttf")) {
@@ -77,8 +77,8 @@ int main() {
 	station *liste_station[3] = {&b,&c,&d} ;
 	int taille_liste = sizeof(liste_station) / sizeof(liste_station[0]);
 
-	thread thread_a(update_all, liste_station, taille_liste, metro);
-	thread thread_nouvelle_rame(update_all, liste_station, taille_liste, metro2);
+	thread thread_metro(update_all, ref(liste_station), ref(taille_liste), ref(metro));
+	thread thread_metro2(update_all, ref(liste_station), ref(taille_liste), ref(metro2));
 
 	//à partir d'ici tout change en fonction de quelles stations on veut être (donc dans la boucle)
 	while (app.isOpen()) // Boucle principale
@@ -100,10 +100,10 @@ int main() {
 		app.draw(backgroundSprite);
 
 
-		thread_a.join();
-		thread_nouvelle_rame.join();
+		thread_metro.join();
+		thread_metro2.join();
 
-		app.display();
+		app.display();// soucis juste ici quanbd 
 	}
 	return EXIT_SUCCESS;
 }

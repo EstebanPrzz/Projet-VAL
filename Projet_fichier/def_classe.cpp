@@ -186,9 +186,9 @@ void update_all(station* liste[], int taille_liste, rame& a) {
     int distance = 0;
     int actuelle = 0;
 
-    a.update_passanger(*liste[0]);
     for (int i = 0; i < 2 * (taille_liste - 1); i++) {// ligne compliqué juste pour dire que je fais toutes les stations
-        if (i < (taille_liste - 1)) { // ici chemin de l'aller 
+        int b = 0;
+        /*if (i < (taille_liste - 1)) { // ici chemin de l'aller 
             distance_entre_stations = liste[i]->distance(*liste[i + 1]);
             distance_entre_stations_x = liste[i]->distance_x(*liste[i + 1]);
             distance_entre_stations_y = liste[i]->distance_y(*liste[i + 1]);
@@ -202,14 +202,18 @@ void update_all(station* liste[], int taille_liste, rame& a) {
             distance_entre_stations_y = liste[actuelle]->distance_y(*liste[actuelle - 1]);
             distance = liste[actuelle]->distance(*liste[actuelle - 1]);
             a.update_passanger(*liste[actuelle]);
-        }
-        while (distance) { // Boucle qui s'occupe de gerer le train sur une distance entre deux stations
-            _sleep(100); // à changer pour la vitesse
+        }*/
+        /*while (distance) { // Boucle qui s'occupe de gerer le train sur une distance entre deux stations
             a.update_vitesse(distance);
             distance -= a.get_speed() * 3.6;
             a.update_pos(distance_entre_stations, distance_entre_stations_x, distance_entre_stations_y);
-        }
-        a.set_speed(0);// ligne qui permet de réinitialiser la vitesse qui bug
+        }*/
+        /*a.set_speed(0);// ligne qui permet de réinitialiser la vitesse qui bug
+        a.set_position(round(a.get_x()), round(a.get_y()));*/
     }
+}
+
+int ab(int entier) {
+    return entier;
 }
 
