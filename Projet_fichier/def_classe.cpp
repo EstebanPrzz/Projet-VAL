@@ -179,7 +179,7 @@ void station::add_passanger(int nb_passanger) {
 
 
 //Def fonction autre
-void update_all(station *liste[], int taille_liste, rame& a) {
+void update_all(station* liste[], int taille_liste, rame& a) {
     int distance_entre_stations = 0;
     int distance_entre_stations_x = 0;
     int distance_entre_stations_y = 0;
@@ -189,7 +189,7 @@ void update_all(station *liste[], int taille_liste, rame& a) {
     a.update_passanger(*liste[0]);
     for (int i = 0; i < 2 * (taille_liste - 1); i++) {// ligne compliqué juste pour dire que je fais toutes les stations
         if (i < (taille_liste - 1)) { // ici chemin de l'aller 
-            distance_entre_stations = liste[i]->distance(*liste[i+1]);
+            distance_entre_stations = liste[i]->distance(*liste[i + 1]);
             distance_entre_stations_x = liste[i]->distance_x(*liste[i + 1]);
             distance_entre_stations_y = liste[i]->distance_y(*liste[i + 1]);
             distance = liste[i]->distance(*liste[i + 1]);
@@ -206,7 +206,6 @@ void update_all(station *liste[], int taille_liste, rame& a) {
         while (distance) { // Boucle qui s'occupe de gerer le train sur une distance entre deux stations
             _sleep(100); // à changer pour la vitesse
             a.update_vitesse(distance);
-            printf("%f", a.get_speed());
             distance -= a.get_speed() * 3.6;
             a.update_pos(distance_entre_stations, distance_entre_stations_x, distance_entre_stations_y);
         }
