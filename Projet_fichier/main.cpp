@@ -24,6 +24,7 @@ int main() {
 	const Vector2u WINDOW_SIZE(1200, 800);
 	RenderWindow app(VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y, 32), "My Camera");
 	app.setFramerateLimit(60);
+	sss
 
 	sf::Font font;
 	if (!font.loadFromFile("C:/Users/Admin/source/repos/EstebanPrzz/Projet-VAL/arial.ttf")) {
