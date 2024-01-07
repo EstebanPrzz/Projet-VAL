@@ -34,7 +34,7 @@ public:
 	//Getters
 	int get_x();
 	int get_y();
-	int get_passanger();
+	int get_passanger()const;
 	char get_name();
 
 	//Setters
