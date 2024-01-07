@@ -4,6 +4,6 @@
 Project(Test)
 
 # Ajoutez une source à l'exécutable de ce projet.
-add_executable (CMakeTarget "def_classe.cpp" "main.cpp")
+add_executable (CMakeTarget "def_classe.cpp" "main.cpp" "nvclasse.h")
 
 # TODO: Ajoutez des tests et installez des cibles si nécessaire.

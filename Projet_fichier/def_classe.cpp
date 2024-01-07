@@ -4,6 +4,7 @@
 #include "classe.h" // Projet qui a les déf de mes classes
 #include <vector>
 #include <math.h>
+#include <stdlib.h>
 #pragma once
 
 
@@ -37,6 +38,25 @@ void rame::set_position(float x, float y) {
 }
 void rame::set_passanger(int nb) {
 	this->passanger = nb;
+}
+
+void rame::update_passanger(station &a) {
+    srand(time(0));
+    int nb_aleatoire = rand() % 100;
+    if (this->passanger <= nb_aleatoire) { //Si tous les passagers sortes
+        this->passanger = 0;
+    }
+    else { // Sinon on enlève que ceux qui sortent
+        this->passanger -= nb_aleatoire;
+    }
+    if (this->passanger + a.get_passanger() <= 100) { //Si il y'a assez de place pour les passagers
+        this->passanger += a.get_passanger();
+    }
+    else { // Sinon on en prend le plus possible et on laisse les autres sur le banc
+        int nb_places = 100 - this->passanger;
+        this->passanger = 100;
+        a.add_passanger(-nb_places);
+    }
 }
 
 void rame::move(const int &vx,const int &vy) {
@@ -108,7 +128,6 @@ int rame::is_on_rail(std::vector<Rail>& rails) {
     return closestIndex;
 }
 
-
 /*rame distance(get(x), get(y), station); //Comment savoir qu'elle station c'est?
 void update_vitesse(distance()); // ça c'est à la fin
 void update_pos(); */ //Tout les x temps on update sa position
@@ -149,6 +168,47 @@ int station::distance_y(station a) {
     return a.get_y() - this->get_y();
 }
 
+void station::update_passanger() {
+    srand(time(0));
+    this->passanger += rand() % 100;
+}
 
-//Def fonction superviseurs
+void station::add_passanger(int nb_passanger) {
+    this->passanger += nb_passanger;
+}
+
+
+//Def fonction autre
+void update_all(station *liste[], int taille_liste, rame& a) {
+    int distance_entre_stations = 0;
+    int distance_entre_stations_x = 0;
+    int distance_entre_stations_y = 0;
+    int distance = 0;
+    int actuelle = 0;
+
+
+    for (int i = 0; i < 2 * (taille_liste - 1); i++) {// ligne compliqué juste pour dire que je fais toutes les stations
+        if (i < (taille_liste - 1)) { // ici chemin de l'aller 
+            distance_entre_stations = liste[i]->distance(*liste[i+1]);
+            distance_entre_stations_x = liste[i]->distance_x(*liste[i + 1]);
+            distance_entre_stations_y = liste[i]->distance_y(*liste[i + 1]);
+            distance = liste[i]->distance(*liste[i + 1]);
+        }
+        else { // ici s'occupe du chemin retour soit quand le i est suppérieur à i-1 taille du tab
+            actuelle = i - (i + 1 - (taille_liste)) * 2;//calcul de golmon imcompréhensible
+            distance_entre_stations = liste[actuelle]->distance(*liste[actuelle - 1]);
+            distance_entre_stations_x = liste[actuelle]->distance_x(*liste[actuelle - 1]);
+            distance_entre_stations_y = liste[actuelle]->distance_y(*liste[actuelle - 1]);
+            distance = liste[actuelle]->distance(*liste[actuelle - 1]);;
+        }
+        while (distance) { // Boucle qui s'occupe de gerer le train sur une distance entre deux stations
+            a.update_vitesse(distance);
+            printf("%f", a.get_speed());
+            distance -= a.get_speed() * 3.6;
+            a.update_pos(distance_entre_stations, distance_entre_stations_x, distance_entre_stations_y);
+        }
+        a.set_speed(0);// ligne qui permet de réinitialiser la vitesse qui bug
+        a.update_passanger(*liste[i+1]);
+    }
+}
 

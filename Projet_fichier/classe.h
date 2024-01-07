@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 
+
 struct Rail {
 	float x, y;
 };
@@ -40,7 +41,8 @@ public:
 	void set_passanger(int nb);
 
 	//Méthode d'instance à instaurer
-	/*void update_passanger();*/ //permet juste de changer le nombre de passagers
+	void update_passanger();
+	void add_passanger(int nb_passanger);
 	int distance(station a);
 	int distance_x(station a);
 	int distance_y(station a);
@@ -76,17 +78,16 @@ public:
 	void set_passanger(int nb);
 
 	//Méthode d'instance à instaurer 
-	/*rame distance(get(x),get(y),station); //Comment savoir qu'elle station c'est?*/
 	void update_pos(int distance, float x, float y);
 	void update_vitesse(int distance); //Fonction qui update la vitesse en fonction de la distance
 	int distance_parcourir(int vitesse); // Permet de savoir la distance que va parcourire le train à une vitesse donnée
 	void move(const int &vx, const int &vy);
 	int is_on_rail(std::vector<Rail>& rails);
+	void update_passanger(station &a);
 };
 
-
-
-
+//Fonction globale
+void update_all(station *liste[], int taille_liste,rame &a);
 	//superviseur(int posx, int posy, char nom, int ramePosx, int ramePosy, int rameNum) {
 	//}
 
