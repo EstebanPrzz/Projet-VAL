@@ -142,7 +142,7 @@ int station::get_x() {
 int station::get_y() {
 	return this->y;
 }
-int station::get_passanger() const{
+int station::get_passanger(){
 	return this->passanger;
 }
 
