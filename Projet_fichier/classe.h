@@ -5,7 +5,15 @@
 
 #include <iostream>
 #include <vector>
+#include <SFML/Graphics.hpp>
+#ifdef _MSC_VER 
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#define _PATH_IMG_ "C:/Program Files/SFML/img/"
+#else
+#define _PATH_IMG_ "../img/"
+#endif
 
+const std::string path_image(_PATH_IMG_);
 
 struct Rail {
 	float x, y;
@@ -91,3 +99,5 @@ void update_all(station *liste[], int taille_liste,rame &a);
 	//superviseur(int posx, int posy, char nom, int ramePosx, int ramePosy, int rameNum) {
 	//}
 // TODO: Référencez ici les en-têtes supplémentaires nécessaires à votre programme.;
+
+void init_app(station* liste[], int taille_liste, rame* liste_rame[], int taille_rame, sf::RenderWindow* app);
