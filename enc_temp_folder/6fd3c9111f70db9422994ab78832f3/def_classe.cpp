@@ -421,7 +421,10 @@ void init_app(station *liste[], int taille_liste, rame * liste_rame[], int taill
 
                 double angle = atan2(liste[2]->get_y() - liste[0]->get_y(), liste[2]->get_x() - liste[0]->get_x()) * (180.0 / M_PI);
                 /*double angle2 = atan2(abs(liste[1]->get_y() - liste[0]->get_y()), abs(liste[1]->get_x() - liste[0]->get_x())) * (180.0 / M_PI);*/
-
+                indexText.setString("position x de la station 2: " + to_string(angle));
+                indexText.setPosition(500, 400); // Position du texte sur l'écran
+                // Afficher le texte à l'écran
+                app.draw(indexText);
 
                 rails.push_back({ liste[2]->get_x(), liste[2]->get_y() });
                 railSprite.setPosition(static_cast<int>(rails[0].x), static_cast<int>(rails[0].y));

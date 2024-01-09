@@ -6,17 +6,12 @@
 #include <iostream>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#ifdef _MSC_VER 
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-#define _PATH_IMG_ "C:/Program Files/SFML/img/"
-#else
-#define _PATH_IMG_ "../img/"
-#endif
 
-const std::string path_image(_PATH_IMG_);
 
 struct Rail {
+public:
 	float x, y;
+	Rail(int xCoord, int yCoord) : x(xCoord), y(yCoord) {}
 };
 
 class station {
@@ -25,8 +20,7 @@ private:
 	int passanger;
 	int x;
 	int y;
-	bool rame_present; // Permet de savoir si la rame est présente ou non au niveau de la station
-	bool ready; // Permet de savoir si on peut envoyer ou non la rame 
+	bool rame_present;
 public:
 
 	station(int posx, int posy, char nom) {
@@ -35,7 +29,6 @@ public:
 		x = posx;
 		y = posy;
 		rame_present = false;
-		ready = false;
 	}
 
 
@@ -44,12 +37,13 @@ public:
 	int get_y();
 	int get_passanger();
 	char get_name();
+	bool get_rame_present();
 
 	//Setters
 	void set_passanger(int nb);
+	void set_rame_present(bool valeur);
 
 	//Méthode d'instance à instaurer
-	void update_passanger();
 	void add_passanger(int nb_passanger);
 	int distance(station a);
 	int distance_x(station a);
@@ -64,6 +58,7 @@ private:
 		float x;
 		float y;
 		int passanger;
+		bool arret_urgence;
 public:
 	rame(float posx, float posy,int num) {
 		number = num;
@@ -71,6 +66,7 @@ public:
 		x = posx;
 		y = posy;
 		passanger = 0;
+		arret_urgence = false;
 	}
 
 	//Getters
@@ -79,11 +75,13 @@ public:
 	float get_x();
 	float get_y();
 	int get_passanger();
+	bool get_arret_urgence();
 
 	//Setters
 	void set_speed(float s);
 	void set_position(float x, float y);
 	void set_passanger(int nb);
+	void set_arret_urgence(bool valeur);
 
 	//Méthode d'instance à instaurer 
 	void update_pos(int distance, float x, float y);
@@ -96,8 +94,9 @@ public:
 
 //Fonction globale
 void update_all(station *liste[], int taille_liste,rame &a);
+void update_passanger_station(station* liste[], int taille_liste);
 	//superviseur(int posx, int posy, char nom, int ramePosx, int ramePosy, int rameNum) {
 	//}
 // TODO: Référencez ici les en-têtes supplémentaires nécessaires à votre programme.;
 
-void init_app(station* liste[], int taille_liste, rame* liste_rame[], int taille_rame, sf::RenderWindow* app);
+void init_app(station *liste[], int taille_liste, rame* liste_rame[], int taille_rame);
