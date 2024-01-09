@@ -58,15 +58,17 @@ private:
 		float x;
 		float y;
 		int passanger;
-		bool arret_urgence;
+		bool arret_urgence; 
+		double angle;
 public:
-	rame(float posx, float posy,int num) {
+	rame(float posx, float posy, int num) {
 		number = num;
 		speed = 0;
 		x = posx;
 		y = posy;
 		passanger = 0;
 		arret_urgence = false;
+		angle = 0;
 	}
 
 	//Getters
@@ -76,12 +78,14 @@ public:
 	float get_y();
 	int get_passanger();
 	bool get_arret_urgence();
+	double get_angle();
 
 	//Setters
 	void set_speed(float s);
 	void set_position(float x, float y);
 	void set_passanger(int nb);
 	void set_arret_urgence(bool valeur);
+	void set_angle(double agl);
 
 	//Méthode d'instance à instaurer 
 	void update_pos(int distance, float x, float y);

@@ -24,7 +24,8 @@ using namespace sf;
 #endif
 
 const std::string path_image(_PATH_IMG_);
-const sf::Vector2u WINDOW_SIZE(1200, 800); // Define WINDOW_SIZE here
+const sf::Vector2u WINDOW_SIZE(1920, 1080); // Define WINDOW_SIZE here
+const float RAIL_THICKNESS = 2.0f;
 
 
 
@@ -53,6 +54,10 @@ bool rame::get_arret_urgence() {
     return this->arret_urgence;
 }
 
+double rame::get_angle() {
+    return this->angle;
+}
+
 void rame::set_speed(float s) {
 	this->speed = s;
 }
@@ -66,6 +71,10 @@ void rame::set_passanger(int nb) {
 
 void rame::set_arret_urgence(bool valeur) {
     this->arret_urgence = valeur;
+}
+
+void rame::set_angle(double agl) {
+    this->angle = agl;
 }
 
 void rame::update_passanger(station &a) {
@@ -231,6 +240,7 @@ void update_all(station* liste[], int taille_liste, rame& a) {
                 a.update_passanger(*liste[i]);
                 liste[i]->set_rame_present(false);
                 indice = i + 1;
+                a.set_angle(atan2(liste[i]->get_y() - liste[i+1]->get_y(), liste[i]->get_x() - liste[i+1]->get_x()) * (180.0 / M_PI));
             }
             else { // ici s'occupe du chemin retour soit quand le i est suppérieur à i-1 taille du tab
                 distance_entre_stations = liste[i]->distance(*liste[0]);
@@ -240,6 +250,7 @@ void update_all(station* liste[], int taille_liste, rame& a) {
                 a.update_passanger(*liste[i]);
                 liste[i]->set_rame_present(false);
                 indice = 0;
+                a.set_angle(atan2(liste[i]->get_y() - liste[0]->get_y(), liste[i]->get_x() - liste[0]->get_x()) * (180.0 / M_PI));
             }
             while (distance) { // Boucle qui s'occupe de gerer le train sur une distance entre deux stations
                 if (!a.get_arret_urgence()) {
@@ -298,9 +309,9 @@ void init_app(station *liste[], int taille_liste, rame * liste_rame[], int taill
     Texture backgroundImage, metroImage, stationImage, railImage;
     Sprite backgroundSprite, stationSprite, railSprite;
     Sprite metroSprite;
-
+    //CHARGEMENT DES SPRITES
     if (!backgroundImage.loadFromFile(path_image + "background1.png") ||
-        !metroImage.loadFromFile(path_image + "test.png") || !stationImage.loadFromFile(path_image + "station1.png") || !railImage.loadFromFile(path_image + "rail1.png")) {
+        !metroImage.loadFromFile(path_image + "metro1.png") || !stationImage.loadFromFile(path_image + "station1.png") || !railImage.loadFromFile(path_image + "rail1.png")) {
         cerr << "Erreur pendant le chargement des images" << endl;
        
     }
@@ -315,6 +326,7 @@ void init_app(station *liste[], int taille_liste, rame * liste_rame[], int taill
     indexText.setCharacterSize(24);
     indexText.setFillColor(sf::Color::White);
 
+    //INITIALISATION DES SPRITES
     backgroundSprite.setTexture(backgroundImage);
     metroSprite.setTexture(metroImage);
     stationSprite.setTexture(stationImage);
@@ -326,8 +338,8 @@ void init_app(station *liste[], int taille_liste, rame * liste_rame[], int taill
     Vector2f halfSize(WINDOW_SIZE.x / 2.f, WINDOW_SIZE.y / 2.f);
     View view(center, halfSize);
     app.setView(view);
-    backgroundSprite.setScale(sf::Vector2f(9, 9));
-    metroSprite.setScale(sf::Vector2f(0.02, 0.02));
+    backgroundSprite.setScale(sf::Vector2f(6.5, 6.5));
+    metroSprite.setScale(sf::Vector2f(-0.10, -0.10));
     stationSprite.setScale(sf::Vector2f(0.2, 0.2));
     railSprite.setScale(sf::Vector2f(2, 2));
 
@@ -359,107 +371,58 @@ void init_app(station *liste[], int taille_liste, rame * liste_rame[], int taill
         app.clear();
         // background
         app.draw(backgroundSprite);
-        
+        double angle = 0;
         for (int i = 0;i < taille_liste;i++) {
             stationSprite.setPosition(liste[i]->get_x(), liste[i]->get_y());
 
             app.draw(stationSprite);
         }
 
-        //int k = 0;
-        //for (int i = 0;i < taille_liste;i++) {
-        //    while ((rails[i].x < liste[i+1]->get_x() && rails[i].y) < liste[i+1]->get_y()) {
-        //        railSprite.setPosition(liste[i]->get_x()+k, liste[i]->get_y()+k);
-        //        railSprite.setRotation(angle);
-        //        k += 26;
-        //        app.draw(stationSprite);
-        //    }
-        //}
-        
+        //affichage rails
 
-        int j = 0;
-        railSprite.setPosition(liste[j]->get_x(), liste[j]->get_y());
-        FloatRect Rbounds = railSprite.getLocalBounds();
 
+// Dessiner des lignes (rails) entre les stations
         for (int i = 0; i < taille_liste; i++) {
-            int z = 0;
-            rails.clear();
-            if (i < taille_liste - 1) { // ici chemin de l'aller 
-                int x_dir = ((liste[i]->get_x() - liste[i + 1]->get_x()) < 0) ? 1 : -1;
-                int y_dir = ((liste[i]->get_y() - liste[i + 1]->get_y()) < 0) ? 1 : -1;
+            // Calculer la position de la ligne (rail) entre deux stations
+            sf::Vector2f positionStation1(liste[i]->get_x(), liste[i]->get_y());
+            sf::Vector2f positionStation2(liste[(i + 1) % taille_liste]->get_x(), liste[(i + 1) % taille_liste]->get_y());
 
-                double angle = atan2(liste[i + 1]->get_y() - liste[i]->get_y(), liste[i + 1]->get_x() - liste[i]->get_x()) * (180.0 / M_PI);
-                int abc = 0;
-                /*double angle2 = atan2(abs(liste[1]->get_y() - liste[0]->get_y()), abs(liste[1]->get_x() - liste[0]->get_x())) * (180.0 / M_PI);*/
-                //indexText.setString("position x de la station 2: " + to_string(angle2));
-                //indexText.setPosition(500, 400); // Position du texte sur l'écran
-                //// Afficher le texte à l'écran
-                //app.draw(indexText);
+            // Calculer l'angle entre deux stations
+            float angle = atan2(positionStation2.y - positionStation1.y, positionStation2.x - positionStation1.x);
 
-                rails.push_back({ liste[i]->get_x(), liste[i]->get_y() });
-                railSprite.setPosition(static_cast<int>(rails[0].x), static_cast<int>(rails[0].y));
-                railSprite.setRotation(-angle);
-                app.draw(railSprite);
+            // Calculer la distance entre deux stations
+            float distance = sqrt(pow(positionStation2.x - positionStation1.x, 2) + pow(positionStation2.y - positionStation1.y, 2));
 
-                k = 16;
-                int somme = (liste[i]->distance(*liste[i + 1]))/10;
-                while (somme>0) {
-                    railSprite.setOrigin(Rbounds.width / 2, Rbounds.height / 2);
-                    rails.push_back({ static_cast<int>(rails[z].x) + k * x_dir, static_cast<int>(rails[z].y) + k * y_dir });
-                    z++;
-                    railSprite.setPosition(static_cast<int>(rails[z].x), static_cast<int>(rails[z].y));
-                    railSprite.setRotation(-angle);
-                    app.draw(railSprite);
-                    somme -= 26;
-                }
-            }
-            else{ // ici s'occupe du chemin retour soit quand le i est suppérieur à i-1 taille du tab
-                int z = 0;
-                rails.clear();
-                int x_dir = ((liste[2]->get_x() - liste[0]->get_x()) < 0) ? 1 : -1;
-                int y_dir = ((liste[2]->get_y() - liste[0]->get_y()) < 0) ? 1 : -1;
+            // Créer un rectangle représentant le rail
+            sf::RectangleShape rail(sf::Vector2f(distance, 5)); // Ajuster l'épaisseur si nécessaire
+            rail.setPosition(positionStation1);
+            rail.setRotation(angle * 180 / M_PI); // Convertir l'angle en degrés
 
-                double angle = atan2(liste[2]->get_y() - liste[0]->get_y(), liste[2]->get_x() - liste[0]->get_x()) * (180.0 / M_PI);
-                /*double angle2 = atan2(abs(liste[1]->get_y() - liste[0]->get_y()), abs(liste[1]->get_x() - liste[0]->get_x())) * (180.0 / M_PI);*/
+            // Définir la couleur du rail
+            sf::Color couleurRail(200, 200, 200); // Ajuster la couleur si nécessaire
+            rail.setFillColor(couleurRail);
 
-
-                rails.push_back({ liste[2]->get_x(), liste[2]->get_y() });
-                railSprite.setPosition(static_cast<int>(rails[0].x), static_cast<int>(rails[0].y));
-                railSprite.setRotation(-angle);
-                app.draw(railSprite);
-
-                k = 16;
-                int somme = (liste[2]->distance(*liste[0])) / 10;
-                while ((somme)>0) {
-                    railSprite.setOrigin(Rbounds.width / 2, Rbounds.height / 2);
-                    rails.push_back({ static_cast<int>(rails[z].x) + k * x_dir, static_cast<int>(rails[z].y) + k * y_dir });
-                    z++;
-                    railSprite.setPosition(static_cast<int>(rails[z].x), static_cast<int>(rails[z].y));
-                    railSprite.setRotation(-45);
-                    app.draw(railSprite);
-                    somme -= 26;
-                }
-            }
-
-            
+            // Dessiner le rail
+            app.draw(rail);
         }
-        
-         //affichage métro
-        for (int i = 0;i < taille_rame;i++) {
+
+        // Affichage métro
+        for (int i = 0; i < taille_rame; i++) {  // Notez le changement dans la condition de la boucle
             metroSprite.setPosition(liste_rame[i]->get_x(), liste_rame[i]->get_y());
-            FloatRect Mbounds = metroSprite.getLocalBounds();
-            metroSprite.setOrigin(Mbounds.width / 2, Mbounds.height / 2);
-            double angle = atan2(liste[i+1]->get_y() - liste[i]->get_y(), liste[i+1]->get_x() - liste[i]->get_x()) * (180.0 / M_PI);
-            metroSprite.setRotation(-angle);
+
+            // Calculer l'angle entre la station actuelle et la suivante
+            metroSprite.setRotation(liste_rame[i]->get_angle());  // Définir la rotation
+            if (i == 0) {
+                //DEBUG
+                //indexText.setString("position x de la station 2 : " + to_string(angle));
+                //indexText.setPosition(500, 400); // Position du texte sur l'écran
+                //app.draw(indexText);
+            }
             app.draw(metroSprite);
         }
 
-        app.draw(stationSprite);
-       
-  
-        
-
-        //indexText.setString("position x de la station 2: " + to_string(angle));
+        //DEBUG
+        //indexText.setString("position x de la station 2: " + to_string( liste_rame[taille_rame - 1]->get_y()));
         //indexText.setPosition(500, 400); // Position du texte sur l'écran
         // Afficher le texte à l'écran
         //app.draw(indexText);
